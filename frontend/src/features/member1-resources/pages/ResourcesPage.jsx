@@ -1,0 +1,319 @@
+import { useEffect, useMemo, useState } from "react";
+import ResourceTable from "../components/ResourceTable";
+import ResourceCard from "../components/ResourceCard";
+import {
+  getAllResources,
+  getByType,
+  getByStatus,
+  getByLocation,
+  searchResources
+} from "../services/resourceApi";
+
+const TYPES = ["", "LECTURE_HALL", "LAB", "MEETING_ROOM", "EQUIPMENT"];
+const STATUSES = ["", "ACTIVE", "OUT_OF_SERVICE"];
+const SORTS = [
+  { key: "name-asc", label: "Name (A–Z)" },
+  { key: "name-desc", label: "Name (Z–A)" },
+  { key: "capacity-desc", label: "Capacity (high → low)" },
+  { key: "capacity-asc", label: "Capacity (low → high)" },
+  { key: "status-asc", label: "Status" }
+];
+
+export default function ResourcesPage() {
+  const [resources, setResources] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const [keyword, setKeyword] = useState("");
+  const [type, setType] = useState("");
+  const [status, setStatus] = useState("");
+  const [location, setLocation] = useState("");
+  const [view, setView] = useState("table"); // table | cards
+  const [sortKey, setSortKey] = useState("name-asc");
+
+  const loadAll = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await getAllResources();
+      setResources(res.data);
+    } catch (e) {
+      setError("Cannot reach the backend API. Make sure Spring Boot is running on port 8080.");
+      setResources([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const apply = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      if (keyword.trim()) {
+        const res = await searchResources(keyword.trim());
+        setResources(res.data);
+        return;
+      }
+      if (type) {
+        const res = await getByType(type);
+        setResources(res.data);
+        return;
+      }
+      if (status) {
+        const res = await getByStatus(status);
+        setResources(res.data);
+        return;
+      }
+      if (location.trim()) {
+        const res = await getByLocation(location.trim());
+        setResources(res.data);
+        return;
+      }
+      await loadAll();
+    } catch (e) {
+      setError("Cannot reach the backend API. Make sure Spring Boot is running on port 8080.");
+      setResources([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clear = async () => {
+    setKeyword("");
+    setType("");
+    setStatus("");
+    setLocation("");
+    await loadAll();
+  };
+
+  useEffect(() => {
+    loadAll();
+  }, []);
+
+  const stats = useMemo(() => {
+    const total = resources.length;
+    const active = resources.filter((r) => r.status === "ACTIVE").length;
+    const out = resources.filter((r) => r.status === "OUT_OF_SERVICE").length;
+    return { total, active, out };
+  }, [resources]);
+
+  const sortedResources = useMemo(() => {
+    const list = [...resources];
+    const byText = (a, b) => String(a ?? "").localeCompare(String(b ?? ""));
+
+    switch (sortKey) {
+      case "name-desc":
+        list.sort((a, b) => byText(b.name, a.name));
+        break;
+      case "capacity-desc":
+        list.sort((a, b) => (Number(b.capacity) || 0) - (Number(a.capacity) || 0));
+        break;
+      case "capacity-asc":
+        list.sort((a, b) => (Number(a.capacity) || 0) - (Number(b.capacity) || 0));
+        break;
+      case "status-asc":
+        list.sort((a, b) => byText(a.status, b.status) || byText(a.name, b.name));
+        break;
+      case "name-asc":
+      default:
+        list.sort((a, b) => byText(a.name, b.name));
+        break;
+    }
+
+    return list;
+  }, [resources, sortKey]);
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between gap-2">
+        <div>
+          <h2 className="text-lg font-semibold tracking-tight text-slate-50 sm:text-xl">
+            Resources
+          </h2>
+          <p className="mt-1 text-xs text-slate-400">
+            Search and filter across all available resources.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Total resources
+          </p>
+          <p className="mt-1 text-2xl font-semibold text-slate-50">{stats.total}</p>
+        </div>
+        <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Active
+          </p>
+          <p className="mt-1 text-2xl font-semibold text-emerald-400">{stats.active}</p>
+        </div>
+        <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Out of service
+          </p>
+          <p className="mt-1 text-2xl font-semibold text-amber-300">{stats.out}</p>
+        </div>
+      </div>
+
+      <div className="grid gap-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-4 sm:grid-cols-[2fr,1.2fr] sm:p-5">
+        <div className="space-y-3">
+          <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+            Keyword
+            <input
+              placeholder="Search by name or location…"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="h-9 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+            />
+          </label>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+              Type
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                className="h-9 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+              >
+                {TYPES.map((t) => (
+                  <option key={t || "none"} value={t}>
+                    {t ? t : "Any type"}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+              Status
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="h-9 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+              >
+                {STATUSES.map((s) => (
+                  <option key={s || "none"} value={s}>
+                    {s ? s : "Any status"}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+              Location
+              <input
+                placeholder="Exact location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="h-9 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+              />
+            </label>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+              Sort
+              <select
+                value={sortKey}
+                onChange={(e) => setSortKey(e.target.value)}
+                className="h-9 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+              >
+                {SORTS.map((s) => (
+                  <option key={s.key} value={s.key}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <div className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+              View
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setView("table")}
+                  className={
+                    "inline-flex flex-1 items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold transition " +
+                    (view === "table"
+                      ? "bg-slate-100 text-slate-950"
+                      : "border border-slate-700 text-slate-200 hover:bg-slate-900/60")
+                  }
+                >
+                  Table
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setView("cards")}
+                  className={
+                    "inline-flex flex-1 items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold transition " +
+                    (view === "cards"
+                      ? "bg-slate-100 text-slate-950"
+                      : "border border-slate-700 text-slate-200 hover:bg-slate-900/60")
+                  }
+                >
+                  Cards
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col justify-between gap-3">
+          <div className="text-xs text-slate-400">
+            <p className="font-medium text-slate-300">How filters work</p>
+            <p className="mt-1">
+              Keyword search takes priority, followed by type, status, and location filters.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={apply}
+              disabled={loading}
+              className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-emerald-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loading ? "Loading…" : "Apply filters"}
+            </button>
+            <button
+              type="button"
+              onClick={clear}
+              disabled={loading}
+              className="inline-flex items-center justify-center rounded-full border border-slate-600 px-4 py-1.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {loading && (
+        <p className="text-xs text-slate-400">
+          Fetching resources…
+        </p>
+      )}
+
+      {error && (
+        <div className="rounded-2xl border border-rose-500/40 bg-rose-950/40 px-4 py-3 text-sm text-rose-100">
+          {error}
+        </div>
+      )}
+
+      {view === "cards" ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {sortedResources.map((r) => (
+            <ResourceCard key={r.id} resource={r} />
+          ))}
+          {sortedResources.length === 0 && (
+            <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6 text-sm text-slate-300 sm:col-span-2 lg:col-span-3">
+              No resources found. Try adjusting your filters.
+            </div>
+          )}
+        </div>
+      ) : (
+        <ResourceTable resources={sortedResources} showAdminActions={false} />
+      )}
+    </div>
+  );
+}
