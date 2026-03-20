@@ -47,7 +47,7 @@ Frontend (React)
 Java 23
 
 Spring Boot 4
-
+hi
 Hibernate JPA
 
 MySQL
