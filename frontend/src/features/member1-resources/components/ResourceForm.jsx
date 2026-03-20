@@ -33,7 +33,7 @@ export default function ResourceForm({ initialValues, onSubmit, submitText }) {
     >
       <div className="grid gap-2">
         <label className="text-xs font-medium uppercase tracking-wide text-slate-400">
-          Name
+          Names
         </label>
         <input
           placeholder="Enter resource name"
