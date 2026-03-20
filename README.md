@@ -53,6 +53,9 @@ Hibernate JPA
 
 MySQL
 
+
+add niroda
+
 React (Vite)
 
 Axios
