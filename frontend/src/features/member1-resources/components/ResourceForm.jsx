@@ -3,26 +3,38 @@ import { useState } from "react";
 const TYPES = ["LECTURE_HALL", "LAB", "MEETING_ROOM", "EQUIPMENT"];
 const STATUSES = ["ACTIVE", "OUT_OF_SERVICE"];
 
+const normTime = (v) => (v ? String(v).slice(0, 8) : "09:00:00"); // HH:mm:ss
+
 export default function ResourceForm({ initialValues, onSubmit, submitText }) {
   const [form, setForm] = useState(
-    initialValues || {
-      name: "",
-      type: "LAB",
-      capacity: 1,
-      location: "",
-      availabilityStart: "09:00:00",
-      availabilityEnd: "17:00:00",
-      status: "ACTIVE"
-    }
+    initialValues
+      ? {
+          ...initialValues,
+          availabilityStart: normTime(initialValues.availabilityStart) || "09:00:00",
+          availabilityEnd: normTime(initialValues.availabilityEnd) || "17:00:00"
+        }
+      : {
+          name: "",
+          type: "LAB",
+          capacity: 1,
+          location: "",
+          availabilityStart: "09:00:00",
+          availabilityEnd: "17:00:00",
+          status: "ACTIVE"
+        }
   );
 
   const change = (key, value) => setForm((p) => ({ ...p, [key]: value }));
+
+  const toTime = (v) => (v && v.length === 5 ? `${v}:00` : v || "09:00:00");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({
       ...form,
-      capacity: Number(form.capacity)
+      capacity: Number(form.capacity),
+      availabilityStart: toTime(form.availabilityStart),
+      availabilityEnd: toTime(form.availabilityEnd)
     });
   };
 
