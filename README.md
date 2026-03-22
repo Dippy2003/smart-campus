@@ -48,9 +48,13 @@ Java 23
 
 Spring Boot 4
 hi
+bye
 Hibernate JPA
 
 MySQL
+
+
+add niroda
 
 React (Vite)
 

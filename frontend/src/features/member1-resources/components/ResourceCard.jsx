@@ -4,7 +4,14 @@ export default function ResourceCard({ resource }) {
   return (
     <div className="flex w-full max-w-sm flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
       <div className="space-y-2">
-        <h3 className="text-base font-semibold tracking-tight text-slate-900">{resource.name}</h3>
+
+        <h3 className="text-base font-semibold tracking-tight text-slate-50">
+          {resource.name}
+          <h1 className="inline-flex items-center rounded-full bg-slate-900 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-slate-300 ml-2">
+            ID: {resource.id}
+          </h1>
+        </h3>
+
 
         <div className="flex flex-wrap gap-2 text-xs">
           <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2 py-1 font-semibold uppercase tracking-wide text-[11px] text-slate-700">

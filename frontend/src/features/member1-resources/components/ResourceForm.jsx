@@ -47,7 +47,11 @@ export default function ResourceForm({ initialValues, onSubmit, submitText }) {
       className="grid max-w-xl gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
     >
       <div className="grid gap-2">
-        <label className="text-xs font-medium uppercase tracking-wide text-slate-600">Name</label>
+
+        <label className="text-xs font-medium uppercase tracking-wide text-slate-400">
+          Namess
+        </label>
+
         <input
           placeholder="Enter resource name"
           value={form.name}
