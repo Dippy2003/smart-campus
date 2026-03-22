@@ -41,30 +41,26 @@ export default function AdminResourcesPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold tracking-tight text-slate-50 sm:text-xl">
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">
             Admin · Resources
           </h2>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-slate-600">
             Manage, edit, and remove resources from the system.
           </p>
         </div>
 
         <Link
           to="/admin/resources/new"
-          className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold text-emerald-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400"
+          className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-500"
         >
           + Add resource
         </Link>
       </div>
 
-      {loading && (
-        <p className="text-xs text-slate-400">
-          Loading resources…
-        </p>
-      )}
+      {loading && <p className="text-xs text-slate-600">Loading resources…</p>}
 
       {error && (
-        <div className="rounded-2xl border border-rose-500/40 bg-rose-950/40 px-4 py-3 text-sm text-rose-100">
+        <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
           {error}
         </div>
       )}

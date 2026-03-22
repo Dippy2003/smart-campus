@@ -13,6 +13,9 @@ const SORTS = [
   { key: "status-asc", label: "Status" }
 ];
 
+const inputClass =
+  "h-9 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30";
+
 export default function ResourcesPage() {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -106,56 +109,52 @@ export default function ResourcesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <h2 className="text-lg font-semibold tracking-tight text-slate-50 sm:text-xl">
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">
             Resources
           </h2>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-slate-600">
             Search and filter across all available resources.
           </p>
         </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
             Total resources
           </p>
-          <p className="mt-1 text-2xl font-semibold text-slate-50">{stats.total}</p>
+          <p className="mt-1 text-2xl font-semibold text-slate-900">{stats.total}</p>
         </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
             Active
           </p>
-          <p className="mt-1 text-2xl font-semibold text-emerald-400">{stats.active}</p>
+          <p className="mt-1 text-2xl font-semibold text-emerald-600">{stats.active}</p>
         </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
             Out of service
           </p>
-          <p className="mt-1 text-2xl font-semibold text-amber-300">{stats.out}</p>
+          <p className="mt-1 text-2xl font-semibold text-amber-600">{stats.out}</p>
         </div>
       </div>
 
-      <div className="grid gap-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-4 sm:grid-cols-[2fr,1.2fr] sm:p-5">
+      <div className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-[2fr,1.2fr] sm:p-5">
         <div className="space-y-3">
-          <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+          <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-600">
             Keyword
             <input
               placeholder="Search by name or location…"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              className="h-9 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+              className={inputClass}
             />
           </label>
 
           <div className="grid gap-3 sm:grid-cols-3">
-            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-600">
               Type
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                className="h-9 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
-              >
+              <select value={type} onChange={(e) => setType(e.target.value)} className={inputClass}>
                 {TYPES.map((t) => (
                   <option key={t || "none"} value={t}>
                     {t ? t : "Any type"}
@@ -164,12 +163,12 @@ export default function ResourcesPage() {
               </select>
             </label>
 
-            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-600">
               Status
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="h-9 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+                className={inputClass}
               >
                 {STATUSES.map((s) => (
                   <option key={s || "none"} value={s}>
@@ -179,24 +178,24 @@ export default function ResourcesPage() {
               </select>
             </label>
 
-            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-600">
               Location
               <input
-                placeholder="Exact location"
+                placeholder="Filter by location"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="h-9 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+                className={inputClass}
               />
             </label>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+            <label className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-600">
               Sort
               <select
                 value={sortKey}
                 onChange={(e) => setSortKey(e.target.value)}
-                className="h-9 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+                className={inputClass}
               >
                 {SORTS.map((s) => (
                   <option key={s.key} value={s.key}>
@@ -206,7 +205,7 @@ export default function ResourcesPage() {
               </select>
             </label>
 
-            <div className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+            <div className="grid gap-1 text-xs font-medium uppercase tracking-wide text-slate-600">
               View
               <div className="flex gap-2">
                 <button
@@ -215,8 +214,8 @@ export default function ResourcesPage() {
                   className={
                     "inline-flex flex-1 items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold transition " +
                     (view === "table"
-                      ? "bg-slate-100 text-slate-950"
-                      : "border border-slate-700 text-slate-200 hover:bg-slate-900/60")
+                      ? "bg-emerald-600 text-white shadow-sm"
+                      : "border border-slate-300 text-slate-700 hover:bg-slate-50")
                   }
                 >
                   Table
@@ -227,8 +226,8 @@ export default function ResourcesPage() {
                   className={
                     "inline-flex flex-1 items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold transition " +
                     (view === "cards"
-                      ? "bg-slate-100 text-slate-950"
-                      : "border border-slate-700 text-slate-200 hover:bg-slate-900/60")
+                      ? "bg-emerald-600 text-white shadow-sm"
+                      : "border border-slate-300 text-slate-700 hover:bg-slate-50")
                   }
                 >
                   Cards
@@ -239,8 +238,8 @@ export default function ResourcesPage() {
         </div>
 
         <div className="flex flex-col justify-between gap-3">
-          <div className="text-xs text-slate-400">
-            <p className="font-medium text-slate-300">Filters</p>
+          <div className="text-xs text-slate-600">
+            <p className="font-medium text-slate-800">Filters</p>
             <p className="mt-1">
               Keyword searches name & location. Type, status, and location filters apply together.
             </p>
@@ -251,7 +250,7 @@ export default function ResourcesPage() {
               type="button"
               onClick={clear}
               disabled={loading}
-              className="inline-flex items-center justify-center rounded-full border border-slate-600 px-4 py-1.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
             >
               Clear filters
             </button>
@@ -259,14 +258,10 @@ export default function ResourcesPage() {
         </div>
       </div>
 
-      {loading && (
-        <p className="text-xs text-slate-400">
-          Fetching resources…
-        </p>
-      )}
+      {loading && <p className="text-xs text-slate-600">Fetching resources…</p>}
 
       {error && (
-        <div className="rounded-2xl border border-rose-500/40 bg-rose-950/40 px-4 py-3 text-sm text-rose-100">
+        <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
           {error}
         </div>
       )}
@@ -277,7 +272,7 @@ export default function ResourcesPage() {
             <ResourceCard key={r.id} resource={r} />
           ))}
           {sortedResources.length === 0 && (
-            <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6 text-sm text-slate-300 sm:col-span-2 lg:col-span-3">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-sm text-slate-600 sm:col-span-2 lg:col-span-3">
               No resources found. Try adjusting your filters.
             </div>
           )}

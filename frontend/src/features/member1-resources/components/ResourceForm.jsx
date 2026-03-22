@@ -5,6 +5,9 @@ const STATUSES = ["ACTIVE", "OUT_OF_SERVICE"];
 
 const normTime = (v) => (v ? String(v).slice(0, 8) : "09:00:00"); // HH:mm:ss
 
+const fieldClass =
+  "h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30";
+
 export default function ResourceForm({ initialValues, onSubmit, submitText }) {
   const [form, setForm] = useState(
     initialValues
@@ -41,30 +44,30 @@ export default function ResourceForm({ initialValues, onSubmit, submitText }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid max-w-xl gap-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-5 shadow-lg shadow-slate-950/70 sm:p-6"
+      className="grid max-w-xl gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
     >
       <div className="grid gap-2">
+
         <label className="text-xs font-medium uppercase tracking-wide text-slate-400">
           Namess
         </label>
+
         <input
           placeholder="Enter resource name"
           value={form.name}
           onChange={(e) => change("name", e.target.value)}
           required
-          className="h-10 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+          className={fieldClass}
         />
       </div>
 
       <div className="grid gap-2 sm:grid-cols-2">
         <div className="grid gap-2">
-          <label className="text-xs font-medium uppercase tracking-wide text-slate-400">
-            Type
-          </label>
+          <label className="text-xs font-medium uppercase tracking-wide text-slate-600">Type</label>
           <select
             value={form.type}
             onChange={(e) => change("type", e.target.value)}
-            className="h-10 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+            className={fieldClass}
           >
             {TYPES.map((t) => (
               <option key={t} value={t}>
@@ -75,7 +78,7 @@ export default function ResourceForm({ initialValues, onSubmit, submitText }) {
         </div>
 
         <div className="grid gap-2">
-          <label className="text-xs font-medium uppercase tracking-wide text-slate-400">
+          <label className="text-xs font-medium uppercase tracking-wide text-slate-600">
             Capacity
           </label>
           <input
@@ -85,13 +88,13 @@ export default function ResourceForm({ initialValues, onSubmit, submitText }) {
             value={form.capacity}
             onChange={(e) => change("capacity", e.target.value)}
             required
-            className="h-10 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+            className={fieldClass}
           />
         </div>
       </div>
 
       <div className="grid gap-2">
-        <label className="text-xs font-medium uppercase tracking-wide text-slate-400">
+        <label className="text-xs font-medium uppercase tracking-wide text-slate-600">
           Location
         </label>
         <input
@@ -99,13 +102,13 @@ export default function ResourceForm({ initialValues, onSubmit, submitText }) {
           value={form.location}
           onChange={(e) => change("location", e.target.value)}
           required
-          className="h-10 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+          className={fieldClass}
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-2">
-          <label className="text-xs font-medium uppercase tracking-wide text-slate-400">
+          <label className="text-xs font-medium uppercase tracking-wide text-slate-600">
             Availability start
           </label>
           <input
@@ -114,12 +117,12 @@ export default function ResourceForm({ initialValues, onSubmit, submitText }) {
             value={form.availabilityStart}
             onChange={(e) => change("availabilityStart", e.target.value)}
             required
-            className="h-10 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+            className={fieldClass}
           />
         </div>
 
         <div className="grid gap-2">
-          <label className="text-xs font-medium uppercase tracking-wide text-slate-400">
+          <label className="text-xs font-medium uppercase tracking-wide text-slate-600">
             Availability end
           </label>
           <input
@@ -128,19 +131,17 @@ export default function ResourceForm({ initialValues, onSubmit, submitText }) {
             value={form.availabilityEnd}
             onChange={(e) => change("availabilityEnd", e.target.value)}
             required
-            className="h-10 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+            className={fieldClass}
           />
         </div>
       </div>
 
       <div className="grid gap-2">
-        <label className="text-xs font-medium uppercase tracking-wide text-slate-400">
-          Status
-        </label>
+        <label className="text-xs font-medium uppercase tracking-wide text-slate-600">Status</label>
         <select
           value={form.status}
           onChange={(e) => change("status", e.target.value)}
-          className="h-10 rounded-lg border border-slate-800 bg-slate-900/70 px-3 text-sm text-slate-100 outline-none ring-0 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+          className={fieldClass}
         >
           {STATUSES.map((s) => (
             <option key={s} value={s}>
@@ -153,7 +154,7 @@ export default function ResourceForm({ initialValues, onSubmit, submitText }) {
       <div className="mt-2 flex justify-end gap-3">
         <button
           type="submit"
-          className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-5 py-2 text-sm font-semibold text-emerald-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+          className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         >
           {submitText || "Save resource"}
         </button>

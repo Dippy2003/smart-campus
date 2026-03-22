@@ -20,16 +20,12 @@ export default function ResourceDetailsPage() {
   }, [id]);
 
   if (loading) {
-    return (
-      <p className="text-xs text-slate-400">
-        Loading resource…
-      </p>
-    );
+    return <p className="text-xs text-slate-600">Loading resource…</p>;
   }
 
   if (!resource) {
     return (
-      <div className="rounded-2xl border border-rose-500/40 bg-rose-950/40 px-4 py-3 text-sm text-rose-100">
+      <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
         Resource not found.
       </div>
     );
@@ -39,66 +35,58 @@ export default function ResourceDetailsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold tracking-tight text-slate-50 sm:text-xl">
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">
             {resource.name}
           </h2>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-slate-600">
             Detailed information about this resource.
           </p>
         </div>
 
-        <span className="inline-flex items-center rounded-full bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200">
+        <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
           ID: {resource.id}
         </span>
       </div>
 
-      <div className="grid gap-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-5 text-sm text-slate-100 sm:grid-cols-2">
+      <div className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 text-sm text-slate-900 shadow-sm sm:grid-cols-2">
         <div className="space-y-3">
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
-              Type
-            </p>
-            <p className="mt-1 inline-flex rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-200">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Type</p>
+            <p className="mt-1 inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-800">
               {resource.type}
             </p>
           </div>
 
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
-              Capacity
-            </p>
-            <p className="mt-1 text-slate-100">{resource.capacity}</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Capacity</p>
+            <p className="mt-1 text-slate-900">{resource.capacity}</p>
           </div>
 
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
-              Location
-            </p>
-            <p className="mt-1 text-slate-100">{resource.location}</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Location</p>
+            <p className="mt-1 text-slate-900">{resource.location}</p>
           </div>
         </div>
 
         <div className="space-y-3">
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
               Availability
             </p>
-            <p className="mt-1 text-slate-100">
+            <p className="mt-1 text-slate-900">
               {resource.availabilityStart} – {resource.availabilityEnd}
             </p>
           </div>
 
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
-              Status
-            </p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Status</p>
             <p className="mt-1">
               <span
                 className={
                   "inline-flex rounded-full px-3 py-1 text-xs font-semibold " +
                   (resource.status === "ACTIVE"
-                    ? "bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/40"
-                    : "bg-amber-500/10 text-amber-300 ring-1 ring-amber-500/40")
+                    ? "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200"
+                    : "bg-amber-50 text-amber-900 ring-1 ring-amber-200")
                 }
               >
                 {resource.status}
@@ -110,7 +98,7 @@ export default function ResourceDetailsPage() {
 
       <Link
         to="/resources"
-        className="inline-flex items-center text-xs font-medium text-slate-300 hover:text-slate-100"
+        className="inline-flex items-center text-xs font-medium text-emerald-700 hover:text-emerald-900"
       >
         ← Back to resources
       </Link>
