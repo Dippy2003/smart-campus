@@ -15,28 +15,28 @@ export default function App() {
   const { isAdmin, logout } = useAdminAuth();
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-slate-100">
       <div className="mx-auto max-w-6xl px-4 py-6 lg:py-10">
-        <header className="mb-8 flex flex-col gap-4 border-b border-slate-800 pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <header className="mb-8 flex flex-col gap-4 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
               Resource Management
             </h1>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-slate-600">
               Browse, administer, and keep track of all your resources.
             </p>
           </div>
 
-          <nav className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 p-1 text-sm">
+          <nav className="inline-flex flex-wrap items-center gap-1 rounded-full border border-slate-200 bg-white p-1 text-sm shadow-sm">
             <Link
               to="/"
-              className="rounded-full px-4 py-2 font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white"
+              className="rounded-full px-4 py-2 font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
             >
               Home
             </Link>
             <Link
               to="/resources"
-              className="rounded-full px-4 py-2 font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white"
+              className="rounded-full px-4 py-2 font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
             >
               Resources
             </Link>
@@ -45,20 +45,20 @@ export default function App() {
               <>
                 <Link
                   to="/admin/resources"
-                  className="rounded-full px-4 py-2 font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white"
+                  className="rounded-full px-4 py-2 font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
                 >
                   Admin
                 </Link>
                 <Link
                   to="/admin/resources/new"
-                  className="rounded-full bg-emerald-500 px-4 py-2 font-medium text-emerald-950 shadow-sm transition hover:bg-emerald-400"
+                  className="rounded-full bg-emerald-600 px-4 py-2 font-medium text-white shadow-sm transition hover:bg-emerald-500"
                 >
                   Add resource
                 </Link>
                 <button
                   type="button"
                   onClick={logout}
-                  className="rounded-full px-3 py-2 text-xs font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+                  className="rounded-full px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-800"
                 >
                   Log out
                 </button>
@@ -66,7 +66,7 @@ export default function App() {
             ) : (
               <Link
                 to="/admin/login"
-                className="rounded-full px-4 py-2 font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white"
+                className="rounded-full px-4 py-2 font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
               >
                 Admin login
               </Link>
@@ -74,7 +74,7 @@ export default function App() {
           </nav>
         </header>
 
-        <main className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-[0_18px_60px_rgba(15,23,42,0.85)] backdrop-blur-sm sm:p-6 lg:p-8">
+        <main className="rounded-2xl border border-slate-200 bg-white p-4 shadow-md sm:p-6 lg:p-8">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/resources" element={<ResourcesPage />} />
