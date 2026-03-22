@@ -1,13 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import ResourceTable from "../components/ResourceTable";
 import ResourceCard from "../components/ResourceCard";
-import {
-  getAllResources,
-  getByType,
-  getByStatus,
-  getByLocation,
-  searchResources
-} from "../services/resourceApi";
+import { getAllResources } from "../services/resourceApi";
 
 const TYPES = ["", "LECTURE_HALL", "LAB", "MEETING_ROOM", "EQUIPMENT"];
 const STATUSES = ["", "ACTIVE", "OUT_OF_SERVICE"];
@@ -36,7 +30,7 @@ export default function ResourcesPage() {
     setError("");
     try {
       const res = await getAllResources();
-      setResources(res.data);
+      setResources(res.data ?? []);
     } catch (e) {
       setError("Cannot reach the backend API. Make sure Spring Boot is running on port 8080.");
       setResources([]);
@@ -45,45 +39,11 @@ export default function ResourcesPage() {
     }
   };
 
-  const apply = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      if (keyword.trim()) {
-        const res = await searchResources(keyword.trim());
-        setResources(res.data);
-        return;
-      }
-      if (type) {
-        const res = await getByType(type);
-        setResources(res.data);
-        return;
-      }
-      if (status) {
-        const res = await getByStatus(status);
-        setResources(res.data);
-        return;
-      }
-      if (location.trim()) {
-        const res = await getByLocation(location.trim());
-        setResources(res.data);
-        return;
-      }
-      await loadAll();
-    } catch (e) {
-      setError("Cannot reach the backend API. Make sure Spring Boot is running on port 8080.");
-      setResources([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const clear = async () => {
+  const clear = () => {
     setKeyword("");
     setType("");
     setStatus("");
     setLocation("");
-    await loadAll();
   };
 
   useEffect(() => {
@@ -97,8 +57,27 @@ export default function ResourcesPage() {
     return { total, active, out };
   }, [resources]);
 
+  const filteredResources = useMemo(() => {
+    let list = [...resources];
+    const kw = keyword.trim().toLowerCase();
+    if (kw) {
+      list = list.filter(
+        (r) =>
+          (r.name && r.name.toLowerCase().includes(kw)) ||
+          (r.location && r.location.toLowerCase().includes(kw))
+      );
+    }
+    if (type) list = list.filter((r) => r.type === type);
+    if (status) list = list.filter((r) => r.status === status);
+    if (location.trim()) {
+      const loc = location.trim().toLowerCase();
+      list = list.filter((r) => r.location && r.location.toLowerCase().includes(loc));
+    }
+    return list;
+  }, [resources, keyword, type, status, location]);
+
   const sortedResources = useMemo(() => {
-    const list = [...resources];
+    const list = [...filteredResources];
     const byText = (a, b) => String(a ?? "").localeCompare(String(b ?? ""));
 
     switch (sortKey) {
@@ -121,7 +100,7 @@ export default function ResourcesPage() {
     }
 
     return list;
-  }, [resources, sortKey]);
+  }, [filteredResources, sortKey]);
 
   return (
     <div className="space-y-6">
@@ -261,28 +240,20 @@ export default function ResourcesPage() {
 
         <div className="flex flex-col justify-between gap-3">
           <div className="text-xs text-slate-400">
-            <p className="font-medium text-slate-300">How filters work</p>
+            <p className="font-medium text-slate-300">Filters</p>
             <p className="mt-1">
-              Keyword search takes priority, followed by type, status, and location filters.
+              Keyword searches name & location. Type, status, and location filters apply together.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={apply}
-              disabled={loading}
-              className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-emerald-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loading ? "Loading…" : "Apply filters"}
-            </button>
-            <button
-              type="button"
               onClick={clear}
               disabled={loading}
               className="inline-flex items-center justify-center rounded-full border border-slate-600 px-4 py-1.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Clear
+              Clear filters
             </button>
           </div>
         </div>
