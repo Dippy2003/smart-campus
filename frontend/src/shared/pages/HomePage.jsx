@@ -77,10 +77,10 @@ export default function HomePage() {
             cta="Open"
           />
           <ModuleCard
-            title="Member 2 · Coming soon"
-            description="Add your member 2 feature here."
-            to="/member2"
-            cta="Preview"
+            title="Member 2 · Bookings"
+            description="Create, view, and manage your bookings."
+            to="/bookings"
+            cta="Open"
           />
           <ModuleCard
             title="Member 3 · Coming soon"
