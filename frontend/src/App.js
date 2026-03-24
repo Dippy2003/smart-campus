@@ -10,6 +10,11 @@ import AdminRoute from "./shared/auth/AdminRoute";
 import { useAdminAuth } from "./shared/auth/AdminAuthContext";
 import HomePage from "./shared/pages/HomePage";
 import PlaceholderModulePage from "./shared/pages/PlaceholderModulePage";
+import CreateBookingPage from "./features/member2-bookings/pages/CreateBookingPage";
+import MyBookingsPage from "./features/member2-bookings/pages/MyBookingsPage";
+import AdminBookingsPage from "./features/member2-bookings/pages/AdminBookingsPage";
+import BookingHomePage from "./features/member2-bookings/pages/BookingHomePage";
+
 
 export default function App() {
   const { isAdmin, logout } = useAdminAuth();
@@ -106,7 +111,21 @@ export default function App() {
                 </AdminRoute>
               }
             />
+            <Route path="/bookings" element={<BookingHomePage />}>
+              <Route index element={<CreateBookingPage />} />
+              <Route path="create" element={<CreateBookingPage />} />
+              <Route path="my" element={<MyBookingsPage />} />
+              <Route
+                path="admin"
+                element={
+                  <AdminRoute>
+                    <AdminBookingsPage />
+                  </AdminRoute>
+                }
+              />
+            </Route>
 
+            
             <Route path="/member2" element={<PlaceholderModulePage title="Member 2 Module" />} />
             <Route path="/member3" element={<PlaceholderModulePage title="Member 3 Module" />} />
             <Route path="/member4" element={<PlaceholderModulePage title="Member 4 Module" />} />
